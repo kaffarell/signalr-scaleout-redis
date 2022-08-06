@@ -2,6 +2,7 @@
 Scaling out SignalR to multiple instances using Redis.
 
 ## Quickstart
+Install docker and docker compose, then run:
 ```
 $ docker compose up
 ```
@@ -18,7 +19,31 @@ Then you can open the index.html file in the dist/ folder.
 In the browser you can enter a name into the input field, then open another tab with the same url and insert another name. Then you should see the name you inserted in the second tab appear in the first one. (If you look at the output of docker compose you can also see that the two tabs are connected with two different instances)  
 
 
-## How it works
+## Introduction to Scaleout  
+
+In general, there are two ways to scale a web application: scale up and scale out.  
+  
+* Scale up means using a larger server (or a larger VM) with more RAM, CPUs, etc.
+* Scale out means adding more servers to handle the load.  
+  
+The problem with scaling up is that you quickly hit a limit on the size of the machine. Beyond that, you need to scale out. However, when you scale out, clients can get routed to different servers. A client that is connected to one server will not receive messages sent from another server.  
+  
+  
+![image](https://user-images.githubusercontent.com/42062381/183267471-37f8c211-d028-4d0a-bb0e-ad6ddc43eab5.png)
+  
+One solution is to forward messages between servers, using a component called a backplane. With a backplane enabled, each application instance sends messages to the backplane, and the backplane forwards them to the other application instances. 
+  
+![image](https://user-images.githubusercontent.com/42062381/183267480-d0929375-2aaf-4330-a2dd-674ecf637c8b.png)
+
+SignalR supports thee backplanes: 
+* *Redis* 
+* *Azure Service Bus*
+* *Microsoft SQL Server*  
+  
+In this example we are going to use *Redis*.
+
+
+
 SignalR stores all the connections and their messages in a redis server. By storing them, every instance can send a message to all clients, while that instance is not even connected with every client. Although they "share" the connections through redis, every client still has to keep the connection open with the same server.   
 That means clients "stick" to their server until the connection is closed. If an instance goes down, it automatically switches to the other instance and the connection is still working(because all the info is stored in redis).  
   
