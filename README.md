@@ -16,7 +16,27 @@ In the browser you can enter a name into the input field, then open another tab 
 
 
 ## How it works
-SignalR stores all the connections and their messages in a redis server. All the websocket connections also have a cookie provided by the load-balancer. For example in HaProxy:  
+SignalR stores all the connections and their messages in a redis server. But always storing and retrieving messages from the redis cache would be slow, that's why the instances still have a direct websocket connection to their clients open.   
+That means clients "stick" to their server until the connection is closed. If an instance goes down, it automatically switches to the other instance and the connection is still working(because all the info is stored in redis).  
+  
+ 
+The easiest solution to the "sticking client to server" part is to let haproxy do the work:    
+Haproxy can keep track of the client's IP Address, or other information on the Application layer, to route the connection always to the same server (While the connection is open). ([More info here](https://www.haproxy.com/blog/load-balancing-affinity-persistence-sticky-sessions-what-you-need-to-know/))  
+The only problem is that this only works with WebSocket connections. But SignalR falls back to long polling, if WebSockets are not available. That means we have to explicitly allow only websockets to be used (see the transport option):  
+```js
+let connection = new HubConnectionBuilder()
+    .withUrl("http://localhost:80/statusHub", {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+    })
+    .build();
+```
+  
+But there is also a workaround for this. We can use session cookies to stick a client to a server and thus also allow long polling to be used.
+Using this, when a websocket connection gets instantiated, the clients gets a cookie from the server, and uses that cookie for every request while the connection is open. Haproxy can intercept that cookie and route the requests to the correct server. 
+  
+  
+Haproxy config:  
 ```
 cookie SERVERID insert indirect nocache
 ```
