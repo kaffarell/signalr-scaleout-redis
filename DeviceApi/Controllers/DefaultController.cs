@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeviceApi.Controllers
@@ -10,7 +11,7 @@ namespace DeviceApi.Controllers
         [HttpGet]
         public ActionResult Status()
         {
-            return Ok();
+            return Ok(Dns.GetHostName());
         }
     }
 }

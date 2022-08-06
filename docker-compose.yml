@@ -6,13 +6,24 @@ services:
       - main
   deviceapi:
     build: ./DeviceApi
-    container_name: deviceapi
-    ports:
-      - "80:80"
     depends_on:
       - redis
     networks:
       - main
+    deploy:
+      mode: replicated
+      replicas: 2
+  haproxy:
+    image: haproxy:2.6
+    networks:
+      - main
+    ports:
+      - "80:80" 
+      - "8404:8404" 
+    sysctls:
+      - net.ipv4.ip_unprivileged_port_start=0
+    volumes:
+      - "./haproxy:/usr/local/etc/haproxy:ro"
 
 networks:
   main:

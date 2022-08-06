@@ -1,7 +1,10 @@
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HttpTransportType, HubConnectionBuilder } from '@microsoft/signalr';
 
 let connection = new HubConnectionBuilder()
-    .withUrl("http://localhost:80/statusHub")
+    .withUrl("http://localhost:80/statusHub", {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets
+    })
     .build();
 
 let displayName = '';
