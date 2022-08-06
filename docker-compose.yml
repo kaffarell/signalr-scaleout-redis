@@ -1,0 +1,19 @@
+services:
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - main
+  deviceapi:
+    build: ./DeviceApi
+    container_name: deviceapi
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+    networks:
+      - main
+
+networks:
+  main:
+    driver: bridge

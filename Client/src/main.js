@@ -1,7 +1,7 @@
 import { HubConnectionBuilder } from '@microsoft/signalr';
 
 let connection = new HubConnectionBuilder()
-    .withUrl("http://localhost:5500/statusHub")
+    .withUrl("http://localhost:80/statusHub")
     .build();
 
 let displayName = '';

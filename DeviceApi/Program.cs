@@ -1,5 +1,7 @@
 using Owin;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using DeviceApi.Hubs;
+using Microsoft.AspNet.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +11,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR();
+builder.Services.AddSignalR().AddStackExchangeRedis("redis", options => 
+{
+    options.Configuration.ChannelPrefix = "DeviceStatus";
+});
+
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy",
     builder =>
     {
@@ -33,7 +39,12 @@ app.UseCors("CorsPolicy");
 
 
 app.UseAuthorization();
+
 app.MapControllers();
+
+
+//GlobalHost.DependencyResolver.UseStackExchangeRedis("redis", 6379, "", "DeviceStatus");
+
 app.MapHub<DeviceStatusHub>("/statusHub");
 
 
