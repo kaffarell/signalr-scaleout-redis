@@ -1,4 +1,4 @@
-# signalr-scaleout-redis
+# POC SignalR scaleout with redis and haproxy
 Scaling out SignalR to multiple instances using Redis.
 
 ## Quickstart
