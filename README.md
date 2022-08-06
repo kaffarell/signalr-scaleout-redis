@@ -19,7 +19,7 @@ In the browser you can enter a name into the input field, then open another tab 
 
 
 ## How it works
-SignalR stores all the connections and their messages in a redis server. But always storing and retrieving messages from the redis cache would be slow, that's why the instances still have a direct websocket connection to their clients open.   
+SignalR stores all the connections and their messages in a redis server. By storing them, every instance can send a message to all clients, while that instance is not even connected with every client. Although they "share" the connections through redis, every client still has to keep the connection open with the same server.   
 That means clients "stick" to their server until the connection is closed. If an instance goes down, it automatically switches to the other instance and the connection is still working(because all the info is stored in redis).  
   
  
