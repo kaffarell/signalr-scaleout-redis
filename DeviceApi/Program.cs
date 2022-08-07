@@ -1,7 +1,8 @@
-using Owin;
-using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using DeviceApi.Hubs;
-using Microsoft.AspNet.SignalR;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,14 +39,15 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 
 
+
+app.UseRouting();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints => {
+    endpoints.MapHub<DeviceStatusHub>("/statusHub");
+    endpoints.MapControllers();
+});
 
-
-//GlobalHost.DependencyResolver.UseStackExchangeRedis("redis", 6379, "", "DeviceStatus");
-
-app.MapHub<DeviceStatusHub>("/statusHub");
 
 
 app.Run();
