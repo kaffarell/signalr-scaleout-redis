@@ -21,12 +21,12 @@ In the browser you can enter a name into the input field, then open another tab 
 
 ## Introduction to Scaleout  
 
-In general, there are two ways to scale a web application: scale up and scale out.  
+In general, there are two ways to scale a web application: scale horizontally or vertically.  
   
-* Scale up means using a larger server (or a larger VM) with more RAM, CPUs, etc.
-* Scale out means adding more servers to handle the load.  
+* Scaling vertically (scale up) means using a larger server (or a larger VM) with more RAM, CPUs, etc.
+* Scaling horizontally (scale out) means adding more servers to handle the load.  
   
-The problem with scaling up is that you quickly hit a limit on the size of the machine. Beyond that, you need to scale out. However, when you scale out, clients can get routed to different servers. A client that is connected to one server will not receive messages sent from another server.  
+The problem with vertically is that you quickly hit a limit on the size of the machine. Beyond that, you need to scale horizontally. However, when you scale out, clients can get routed to different servers. A client that is connected to one server will not receive messages sent from another server.  
   
   
 ![image](https://user-images.githubusercontent.com/42062381/183267471-37f8c211-d028-4d0a-bb0e-ad6ddc43eab5.png)
