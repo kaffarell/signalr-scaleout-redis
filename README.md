@@ -6,7 +6,7 @@ Install docker and docker compose, then run:
 ```
 $ docker compose up
 ```
-Then you can access `localhost:80/api` to test if your instances are up. The returned value is the ip address of the instance, thus you should get another ip address everytime you refresh the page.  
+Then you can access `localhost:81/api` to test if your instances are up. The returned value is the ip address of the instance, thus you should get another ip address everytime you refresh the page.  
   
   
 The haproxy status page is available at `localhost:8404`.
